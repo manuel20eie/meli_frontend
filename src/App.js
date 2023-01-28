@@ -1,23 +1,19 @@
-import logo from './logo.svg';
-import './App.css';
+// React
+import React, { useState } from "react";
+// Context
+import { AppContext } from "./libs/contextLib";
+// Routes
+import ContainersRoutes from "./Routes";
+// Styles
+import "./sass/app.scss";
 
 function App() {
+  const [userData, setUserData] = useState(null);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <AppContext.Provider value={{ userData, setUserData }}>
+        <ContainersRoutes />
+      </AppContext.Provider>
     </div>
   );
 }
