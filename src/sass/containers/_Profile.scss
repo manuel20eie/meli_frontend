@@ -1,0 +1,102 @@
+.Profile {
+    &__container {
+        width: 100%;
+        min-height: calc(100vh - 54px);
+        background-color: #ededed;
+        margin-top: 54px;
+        text-align: center;
+        @media screen and (max-width: 768px) {
+            padding-top: 15px;
+        }
+    }
+    &__card {
+        background-color: #ffffff;
+        display: inline-block;
+        padding: 2vh 15vw 2vh 2vh;
+        margin: 3vh auto;
+        border-radius: 5px;
+        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
+        @media screen and (max-width: 768px) {
+            display: block;
+            padding: 2vh;
+            width: 80vw;
+        }
+    }
+    &__card-content {
+        display: flex;
+        align-items: center;
+        @media screen and (max-width: 768px) {
+            display: block;
+        }
+    }
+    &__image-container {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        border: 0.125rem solid #3483fa;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        overflow: hidden;
+        img {
+            width: 100%
+        }
+        margin: auto 20px;
+        @media screen and (max-width: 768px) {
+            margin: auto;
+        }
+    }
+    &__titles {
+        text-align: left;
+        font-family: Proxima Nova,-apple-system,Roboto,Arial,sans-serif;
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin: 0;
+        }
+        p {
+            font-size: 1rem;
+            font-weight: 400;
+            margin: 5px auto;
+        }
+        @media screen and (max-width: 768px) {
+            margin: 2vh;
+            text-align: center;
+        }
+    }
+    &__purchases-container {
+        display: flex;
+        flex-direction: column;
+        width: 50vw;
+        margin: auto;
+        @media screen and (max-width: 768px) {
+            width: 90vw;
+        }
+        &-back {
+            font-family: Proxima Nova,-apple-system,Roboto,Arial,sans-serif;
+            text-align: left;
+            color:rgba(0, 0, 0, 0.5);
+        }
+    }
+    &__purchases-paginator{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: Proxima Nova,-apple-system,Roboto,Arial,sans-serif;
+        font-size: 1rem;
+        font-weight: 400;
+        color:rgba(0, 0, 0, 0.5);
+        span {
+            margin: 2vh 2vw;
+        }        
+    }
+    &__purchases-page{
+        padding: 5px 10px;
+        &--active {
+            background: #fff;
+            border: 2px solid #3483fa;
+            -webkit-border-radius: 6px;
+            border-radius: 6px;
+        }
+    }
+}

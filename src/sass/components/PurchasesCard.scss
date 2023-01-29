@@ -1,0 +1,73 @@
+.PurchasesCard {
+    &__container {
+        background-color: #ffffff;
+        width: 100%;
+        display: inline-block;
+        // padding: 100px;
+        margin: 1vh auto;
+        border-radius: 5px;
+        box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.25);
+        @media screen and (max-width: 768px) {
+            display: block;
+        }
+    }
+    &__date {
+        text-align: left;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+        padding: 2vh;
+    }
+    &__content {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 2vh;
+        @media screen and (max-width: 768px) {
+            display: block;
+        }
+    }
+    &__image-container {
+        display: flex;
+        align-items: center;
+        width: 80px;
+        height: 80px;
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        border-radius: 5px;
+        img {
+            height: 90%;
+            margin: auto;
+        }
+    }
+    &__info {
+        display: flex;
+        flex-direction: column;
+        text-align: left;
+        margin: auto 2vh;
+        font-family: Proxima Nova,-apple-system,Roboto,Arial,sans-serif;
+        span {
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: rgba(0,0,0,0.55)
+        }
+        h2 {
+            font-size: 1rem;
+            color: rgba(0,0,0,0.9);
+            margin: 0.5vh auto;
+        }    
+    }
+    &__button-container{        
+        button {
+            background-color: #3483fa;
+            border-color: transparent;
+            color: #fff;
+            border-radius: 5px;
+            padding: 0.5vh 1.5vw;
+            @media screen and (max-width: 768px) {
+                margin: 0.5vh;
+                padding: 0.8vh 5vw;
+            }
+        }
+        @media screen and (max-width: 768px) {
+            text-align: right;
+        }
+    }
+}

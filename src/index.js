@@ -7,11 +7,15 @@ import { BrowserRouter as Router } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
-  </React.StrictMode>
+  // Commented on purpose for better visualization of the challenge in a local execution
+  // <React.StrictMode>
+  //   <Router>
+  //     <App />
+  //   </Router>
+  // </React.StrictMode>
+  <Router>
+    <App />
+  </Router>
 );
 
 reportWebVitals();
