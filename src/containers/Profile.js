@@ -16,7 +16,7 @@ import {
 } from "../secrets";
 // Functions
 import { getFormatDate } from "../libs/functions";
-import { encodeQuery } from "../libs/auth";
+import { executeQuery } from "../libs/api_functions";
 // Icons
 import { BiErrorCircle, BiError } from "react-icons/bi";
 import { GrCompliance } from "react-icons/gr";
@@ -31,7 +31,7 @@ export default function Profile() {
   };
   const [page, setPage] = useState(1);
   const [pages, setPages] = useState([1]);
-  const [currentPurchases, setCurrentPurchases] = useState([]);
+  const [purchasesList, setPurchasesList] = useState([]);
   const [showDetails, setShowDetails] = useState(false);
   const [currentPurchase, setCurrentPurchase] = useState(null);
   const [loadingPurchases, setLoadingPurchases] = useState(false);
@@ -39,15 +39,15 @@ export default function Profile() {
   useEffect(() => {
     const pageInit = async () => {
       if (userData === null) {
-        let userData_ = await encodeQuery(GET_USER);
+        let userData_ = await executeQuery(GET_USER);
         setUserData(userData_.data);
 
-        let level_info_ = await encodeQuery(GET_LEVEL_INFO, {
+        let level_info_ = await executeQuery(GET_LEVEL_INFO, {
           levelId: userData_.data.nivel,
         });
         setUserData({ ...userData_.data, level_info: level_info_.data });
 
-        let purchases_ = await encodeQuery(GET_USER_PURCHASES, {
+        let purchases_ = await executeQuery(GET_USER_PURCHASES, {
           userId: userData_.data.id_usuario,
           offset: 0,
           limit: limit,
@@ -57,12 +57,12 @@ export default function Profile() {
           level_info: level_info_.data,
           purchases: purchases_.data,
         });
-        setCurrentPurchases(purchases_.data.data);
+        setPurchasesList(purchases_.data.data);
         // Set pages
         let max_page = Math.ceil(purchases_.data.total / limit);
         setPages(Array.from({ length: max_page }, (_, i) => i + 1));
 
-        let restrictions_ = await encodeQuery(GET_USER_RESTRICTIONS, {
+        let restrictions_ = await executeQuery(GET_USER_RESTRICTIONS, {
           userId: userData_.data.id_usuario,
         });
         setUserData({
@@ -74,47 +74,46 @@ export default function Profile() {
       }
     };
     pageInit();
-  }, []);
-
-  const updatePage = async () => {
-    if (
-      page * limit > userData.purchases.data.length &&
-      page * limit <= userData.purchases.total
-    ) {
-      setLoadingPurchases(true);
-      let purchases_ = await encodeQuery(GET_USER_PURCHASES, {
-        userId: userData.id_usuario,
-        limit: limit,
-        offset: userData.purchases.offset + limit,
-      });
-      let current_purchases = { ...userData.purchases };
-      let purchases = [...current_purchases.data];
-      purchases = purchases.concat(purchases_.data.data);
-      current_purchases.data = purchases;
-      current_purchases.total = purchases_.data.total;
-      current_purchases.offset = purchases_.data.offset + limit;
-      setUserData({ ...userData, purchases: current_purchases });
-      setCurrentPurchases(purchases.slice((page - 1) * limit, page * limit));
-      setLoadingPurchases(false);
-    } else {
-      setCurrentPurchases(
-        userData.purchases.data.slice((page - 1) * limit, page * limit)
-      );
-    }
-  };
+  }, [userData, setUserData]);
 
   useEffect(() => {
+    const updatePage = async () => {
+      if (
+        page * limit > userData.purchases.data.length &&
+        page * limit <= userData.purchases.total
+      ) {
+        setLoadingPurchases(true);
+        let purchases_ = await executeQuery(GET_USER_PURCHASES, {
+          userId: userData.id_usuario,
+          limit: limit,
+          offset: userData.purchases.offset + limit,
+        });
+        let current_purchases = { ...userData.purchases };
+        let purchases = [...current_purchases.data];
+        purchases = purchases.concat(purchases_.data.data);
+        current_purchases.data = purchases;
+        current_purchases.total = purchases_.data.total;
+        current_purchases.offset = purchases_.data.offset + limit;
+        setUserData({ ...userData, purchases: current_purchases });
+        setPurchasesList(purchases.slice((page - 1) * limit, page * limit));
+        setLoadingPurchases(false);
+      } else {
+        setPurchasesList(
+          userData.purchases.data.slice((page - 1) * limit, page * limit)
+        );
+      }
+    };
     if (userData?.purchases) {
       updatePage();
     }
-  }, [page]);
+  }, [page, userData, setUserData]);
 
   const getPurchaseDetails = async (currentPurchase) => {
     if (!currentPurchase.shipment_info || !currentPurchase.payment_info) {
-      let shipment_info_ = await encodeQuery(GET_SHIPMENT_DETAILS, {
+      let shipment_info_ = await executeQuery(GET_SHIPMENT_DETAILS, {
         shipmentId: currentPurchase.id_envio,
       });
-      let payment_info_ = await encodeQuery(GET_PAYMENT_DETAILS, {
+      let payment_info_ = await executeQuery(GET_PAYMENT_DETAILS, {
         paymentId: currentPurchase.id_transaccion,
       });
       setCurrentPurchase({
@@ -122,14 +121,14 @@ export default function Profile() {
         shipment_info: shipment_info_.data,
         payment_info: payment_info_.data,
       });
-      let index = currentPurchases
+      let index = purchasesList
         .map((el) => el.id_compra)
         .indexOf(currentPurchase.id_compra);
-      let currentPurchases_ = [...currentPurchases];
+      let purchasesList_ = [...purchasesList];
       currentPurchase.shipment_info = shipment_info_.data;
       currentPurchase.payment_info = payment_info_.data;
-      currentPurchases_[index] = currentPurchase;
-      setCurrentPurchases(currentPurchases_);
+      purchasesList_[index] = currentPurchase;
+      setPurchasesList(purchasesList_);
     }
   };
 
@@ -141,7 +140,7 @@ export default function Profile() {
     };
     return (
       <div className="Profile__purchases-container">
-        {currentPurchases.map(function (el) {
+        {purchasesList.map(function (el) {
           return (
             <PurchasesCard
               key={el.id_compra}
@@ -235,7 +234,7 @@ export default function Profile() {
               </span>
             </div>
             <div>
-              <img src={currentPurchase.imagen}></img>
+              <img src={currentPurchase.imagen} alt="Product"></img>
             </div>
           </div>
         </div>
@@ -244,7 +243,8 @@ export default function Profile() {
             <strong>Detalle de la compra</strong>
           </p>
           <span>
-            {getFormatDate(currentPurchase.fecha)} | #{currentPurchase.id_compra}
+            {getFormatDate(currentPurchase.fecha)} | #
+            {currentPurchase.id_compra}
           </span>
           <div className="horizontal_line"></div>
           <div className="row">
@@ -312,7 +312,7 @@ export default function Profile() {
   return (
     <div className="Profile__container">
       <Header />
-      {userData !== null && (
+      {userData !== null ? (
         <>
           <div className="Profile__card">
             <div className="Profile__card-content">
@@ -363,6 +363,10 @@ export default function Profile() {
             </div>
           )}
         </>
+      ) : (
+        <div className="Profile__purchases-loading">
+          <TailSpin type="TailSpin" color="#3483fa" height={80} width={80} />
+        </div>
       )}
     </div>
   );

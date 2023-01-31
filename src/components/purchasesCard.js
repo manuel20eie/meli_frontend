@@ -10,7 +10,7 @@ export default function purchasesCard({ props, showPurchaseDetails }) {
       <div className="PurchasesCard__content">
         <div style={{ display: "flex" }}>
           <div className="PurchasesCard__image-container">
-            <img src={props.imagen}></img>
+            <img src={props.imagen} alt="User profile"></img>
           </div>
           <div className="PurchasesCard__info">
             <span>{props.id_compra}</span>

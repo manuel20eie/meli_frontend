@@ -2,7 +2,7 @@ import axios from "axios";
 import { JWT_KEY } from "../secrets";
 const jose = require("jose");
 
-export async function encodeQuery(endpoint, data = {}) {
+export async function executeQuery(endpoint, data = {}) {
   let alg = "HS256";
   let secret = new TextEncoder().encode(JWT_KEY);
   let token = await new jose.SignJWT(data)
@@ -17,6 +17,8 @@ export async function encodeQuery(endpoint, data = {}) {
     })
     .catch(function (error) {
       console.log(error);
+      alert("Error de red, comprueba tu conexión.");
+      window.location.reload()
     });
   return response;
 }
