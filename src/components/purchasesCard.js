@@ -1,28 +1,7 @@
+// Functions
+import { getFormatDate } from "../libs/functions";
+
 export default function purchasesCard({ props, showPurchaseDetails }) {
-  const getFormatDate = (dateString) => {
-    let date = new Date(dateString);
-    let months = [
-      "enero",
-      "febrero",
-      "marzo",
-      "abril",
-      "mayo",
-      "junio ",
-      "julio ",
-      "agosto ",
-      "septiembre ",
-      "octubre ",
-      "oviembre ",
-      "diciembre",
-    ];
-    return (
-      date.getDate() +
-      " de " +
-      months[date.getMonth()] +
-      " de " +
-      date.getFullYear()
-    );
-  };
   return (
     <div className="PurchasesCard__container">
       <div className="PurchasesCard__date">

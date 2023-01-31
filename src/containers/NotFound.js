@@ -1,3 +1,4 @@
+// Components
 import Header from "../components/header";
 // Images
 import notFoundPC from "../assets/images/notFoundPC.svg";
